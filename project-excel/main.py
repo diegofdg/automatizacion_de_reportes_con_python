@@ -7,6 +7,9 @@ def main():
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
     for index, row in excel_df.iterrows():
         print(index, row['NOMBRE'])
-
+        
+    asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
+    print(asig_list)
+    
 if __name__ == '__main__':
     main()
