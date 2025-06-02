@@ -18,19 +18,31 @@ dict_asig = {
     'FRANCES':                          'Francés',
 }
 
+def deteccionErrores(df):
+    alumnos_list = sorted(list(df['NOMBRE'].drop_duplicates()))
+    asignatura_list = sorted(list(df['ASIGNATURA'].drop_duplicates()))
+    
+    for al in alumnos_list:
+        for asig in asignatura_list:
+            filt_al_as_df = df[(df['NOMBRE'] == al) & (df['ASIGNATURA'] == asig)]
+            print(filt_al_as_df)
+
 def main():
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
     for index, row in excel_df.iterrows():
-        print(index, row['NOMBRE'])
+        #print(index, row['NOMBRE'])
+        pass
         
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
-    print(asig_list)
+    #print(asig_list)
     
     filter_td_asig = []
     for item in asig_list:
         valorTd = dict_asig[item]
         filter_td_asig.append(valorTd)
-    print('')
+    #print(filter_td_asig)
+    
+    deteccionErrores(excel_df)
     
 if __name__ == '__main__':
     main()
