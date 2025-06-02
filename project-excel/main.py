@@ -25,7 +25,11 @@ def deteccionErrores(df):
     for al in alumnos_list:
         for asig in asignatura_list:
             filt_al_as_df = df[(df['NOMBRE'] == al) & (df['ASIGNATURA'] == asig)]
-            print(filt_al_as_df)
+            #print(filt_al_as_df)
+            if(len(filt_al_as_df) == 0):
+                print(f'Error: El alumno {al} no tiene la asignatura {asig} asignada')
+            elif(len(filt_al_as_df) >1):
+                print(f'Error: El alumno {al} tiene la asignatura {asig} repetida {len(filt_al_as_df)} veces')
 
 def main():
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
