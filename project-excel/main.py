@@ -59,6 +59,21 @@ def deteccionErrores(df):
             print('Ningun error detectado ')
 
 
+def eliminarTildes(texto):
+    tildes_dict = {
+        'Á': 'A',
+        'É': 'E',
+        'Í': 'I',
+        'Ó': 'O',
+        'Ú': 'U',
+    }
+    textoSinTildes = texto
+    for key in tildes_dict:
+        textoSinTildes.replace(key, tildes_dict[key])
+    
+    return textoSinTildes
+    
+
 def main():
     # Cargar documento
     docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
@@ -97,7 +112,11 @@ def main():
         
         # Renderizamos el documento
         docs_tpl.render(context)
-        titulo = 'NOTAS_' + nombre_alumno + '.docx'
+        titulo = 'NOTAS_' + nombre_alumno
+        titulo = titulo.upper()
+        titulo = eliminarTildes(titulo)
+        titulo = titulo.replace(" ", "_")
+        titulo += '.docx'
         
         # Guardamos el documento
         docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
