@@ -1,9 +1,12 @@
 import pandas as pd
 import sys
+from docxtpl import DocxTemplate
 
-PATH_CARPETA = r'D:\mis_proyectos\ciencia_de_datos\automatizacion_de_reportes_con_python\project-excel\inputs'
+PATH_CARPETA = r'D:\mis_proyectos\ciencia_de_datos\automatizacion_de_reportes_con_python\project-excel'
 
-NOTAS_ALUMNOS_PATH = PATH_CARPETA + r'\Notas_Alumnos.xlsx'
+NOTAS_ALUMNOS_PATH = PATH_CARPETA + r'\inputs\Notas_Alumnos.xlsx'
+PLANTILLA_CURSOS_PATH = PATH_CARPETA + r'\inputs\Plantilla_Notas.docx'
+PATH_OUTPUT = PATH_CARPETA + r'\outputs'
 
 dict_asig = {
     'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
@@ -52,6 +55,22 @@ def deteccionErrores(df):
 
 
 def main():
+    # Cargar documento
+    docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
+    
+    # Context
+    context = {
+        'curso': "2021 / 2022",
+        'nombre_alumno': 'Enrique Rodriguez',
+        'clase': '4-C'
+    }
+    
+    # Renderizamos el documento
+    docs_tpl.render(context)
+    
+    # Guardamos el documento
+    docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
+     
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
     for index, row in excel_df.iterrows():
         #print(index, row['NOMBRE'])
