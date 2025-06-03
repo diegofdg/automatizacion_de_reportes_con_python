@@ -84,12 +84,15 @@ def main():
     
     nombre_Alumno_list = sorted(list(datos_alumnos['NOMBRE']))
     nombre_alumno = nombre_Alumno_list[0]
+    
+    filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
+    clase = filt_datos_alumnos_df.iloc[0]['CLASE']
         
     # Context
     context = {
         'curso': CURSO,
         'nombre_alumno': nombre_alumno,
-        'clase': '4-C'
+        'clase': clase
     }
     
     # Renderizamos el documento
