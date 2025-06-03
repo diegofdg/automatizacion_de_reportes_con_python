@@ -1,5 +1,7 @@
 import pandas as pd
 import sys
+import shutil
+import os
 from docxtpl import DocxTemplate
 
 PATH_CARPETA = r'D:\mis_proyectos\ciencia_de_datos\automatizacion_de_reportes_con_python\project-excel'
@@ -69,12 +71,17 @@ def eliminarTildes(texto):
     }
     textoSinTildes = texto
     for key in tildes_dict:
-        textoSinTildes.replace(key, tildes_dict[key])
-    
+        textoSinTildes = textoSinTildes.replace(key, tildes_dict[key])
     return textoSinTildes
     
+def eliminarCrearCarpetas(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
 
-def main():
+    os.mkdir(path)
+
+def main():    
+    eliminarCrearCarpetas(PATH_OUTPUT)  
     # Cargar documento
     docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
          
@@ -119,7 +126,7 @@ def main():
         titulo += '.docx'
         
         # Guardamos el documento
-        docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
+        docs_tpl.save(PATH_OUTPUT + '\\' + titulo)
     
 if __name__ == '__main__':
     main()
