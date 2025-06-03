@@ -3,10 +3,15 @@ import sys
 from docxtpl import DocxTemplate
 
 PATH_CARPETA = r'D:\mis_proyectos\ciencia_de_datos\automatizacion_de_reportes_con_python\project-excel'
-
-NOTAS_ALUMNOS_PATH = PATH_CARPETA + r'\inputs\Notas_Alumnos.xlsx'
-PLANTILLA_CURSOS_PATH = PATH_CARPETA + r'\inputs\Plantilla_Notas.docx'
 PATH_OUTPUT = PATH_CARPETA + r'\outputs'
+
+# Corresponde a nuestro Excel de cursos
+NOTAS_ALUMNOS_PATH = PATH_CARPETA + r'\inputs\Notas_Alumnos.xlsx'
+
+# Corresponde a nuestro Word de cursos
+PLANTILLA_CURSOS_PATH = PATH_CARPETA + r'\inputs\Plantilla_Notas.docx'
+
+CURSO = '2021/2022'
 
 dict_asig = {
     'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
@@ -57,21 +62,11 @@ def deteccionErrores(df):
 def main():
     # Cargar documento
     docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
-    
-    # Context
-    context = {
-        'curso': "2021 / 2022",
-        'nombre_alumno': 'Enrique Rodriguez',
-        'clase': '4-C'
-    }
-    
-    # Renderizamos el documento
-    docs_tpl.render(context)
-    
-    # Guardamos el documento
-    docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
-     
+         
+    # Leemos notas y datos alumnos 
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
+    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
+    
     for index, row in excel_df.iterrows():
         #print(index, row['NOMBRE'])
         pass
@@ -86,6 +81,22 @@ def main():
     #print(filter_td_asig)
     
     deteccionErrores(excel_df)
+    
+    nombre_Alumno_list = sorted(list(datos_alumnos['NOMBRE']))
+    nombre_alumno = nombre_Alumno_list[0]
+        
+    # Context
+    context = {
+        'curso': CURSO,
+        'nombre_alumno': nombre_alumno,
+        'clase': '4-C'
+    }
+    
+    # Renderizamos el documento
+    docs_tpl.render(context)
+    
+    # Guardamos el documento
+    docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
     
 if __name__ == '__main__':
     main()
