@@ -83,23 +83,24 @@ def main():
     deteccionErrores(excel_df)
     
     nombre_Alumno_list = sorted(list(datos_alumnos['NOMBRE']))
-    nombre_alumno = nombre_Alumno_list[0]
     
-    filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
-    clase = filt_datos_alumnos_df.iloc[0]['CLASE']
+    for nombre_alumno in nombre_Alumno_list:
+        filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
+        clase = filt_datos_alumnos_df.iloc[0]['CLASE']
+            
+        # Context
+        context = {
+            'curso': CURSO,
+            'nombre_alumno': nombre_alumno,
+            'clase': clase
+        }
         
-    # Context
-    context = {
-        'curso': CURSO,
-        'nombre_alumno': nombre_alumno,
-        'clase': clase
-    }
-    
-    # Renderizamos el documento
-    docs_tpl.render(context)
-    
-    # Guardamos el documento
-    docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
+        # Renderizamos el documento
+        docs_tpl.render(context)
+        titulo = 'NOTAS_' + nombre_alumno + '.docx'
+        
+        # Guardamos el documento
+        docs_tpl.save(PATH_OUTPUT + r'\fichero_word.docx')
     
 if __name__ == '__main__':
     main()
