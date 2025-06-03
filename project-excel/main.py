@@ -30,6 +30,12 @@ def deteccionErrores(df):
                 print(f'Error: El alumno {al} no tiene la asignatura {asig} asignada')
             elif(len(filt_al_as_df) >1):
                 print(f'Error: El alumno {al} tiene la asignatura {asig} repetida {len(filt_al_as_df)} veces')
+        
+        for index, row in df.iterrows():
+            trimestre_list = ['NOTA T1', 'NOTA T2', 'NOTA T3']
+            for trim in trimestre_list:
+                if not ((row[trim] >= 0.0) and (row[trim] <=10.0)):
+                    print(f'Error: El alumno {al} tiene el campo {trim} de la asignatura {asig} fuera de rango {str(row[trim])}')
 
 def main():
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
