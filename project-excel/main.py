@@ -16,6 +16,12 @@ PLANTILLA_CURSOS_PATH = PATH_CARPETA + r'\inputs\Plantilla_Notas.docx'
 
 CURSO = '2021/2022'
 
+# Colores
+SUSPENSO_COLOR = 'ec7c7b'
+APROBADO_COLOR = 'fbe083'
+NOTABLE_COLOR = '4db4d7'
+SOBRESALIENTE_COLOR = '48bf91'
+
 dict_asig = {
     'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
     'BIOLOGIA':                         'Biología',
@@ -95,13 +101,19 @@ def ObtenerNotaFinal(dict_asignatura):
     # Obtener la calificación
     if(nota_media < 5.0):
         calif = 'SUSPENSO'
+        color_calif = SUSPENSO_COLOR
     elif(nota_media < 7.0):
         calif = 'APROBADO'
+        color_calif = APROBADO_COLOR
     elif(nota_media < 9.0):
         calif = 'NOTABLE'
+        color_calif = NOTABLE_COLOR
     else:
         calif = 'SOBRESALIENTE'
+        color_calif = SOBRESALIENTE_COLOR
+        
     newAsignaturaDict['calificacion'] = calif
+    newAsignaturaDict['color'] = color_calif
     
     return newAsignaturaDict
 
