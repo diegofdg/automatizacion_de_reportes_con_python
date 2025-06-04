@@ -15,21 +15,6 @@ PLANTILLA_CURSOS_PATH = PATH_CARPETA + r'\inputs\Plantilla_Notas.docx'
 
 CURSO = '2021/2022'
 
-dict_asig = {
-    'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
-    'BIOLOGIA':                         'Biología',
-    'GEOGRAFIA E HISTORIA':             'Geografía e Historia',
-    'MATEMATICAS':                      'Matemáticas',
-    'INGLES':                           'Inglés',
-    'EDUCACION FISICA':                 'Educación Física',
-    'ETICA':                            'Ética',
-    'CULTURA CLASICA':                  'Cultura clásica',
-    'MUSICA':                           'Música',
-    'TECNOLOGIA':                       'Tecnología',
-    'EDUCACION PLASTICA':               'Educación Plástica',
-    'FRANCES':                          'Francés',
-}
-
 def deteccionErrores(df):
     err1, err2, err3 = False, False, False
     alumnos_list = sorted(list(df['NOMBRE'].drop_duplicates()))
@@ -38,7 +23,7 @@ def deteccionErrores(df):
     for al in alumnos_list:
         for asig in asignatura_list:
             filt_al_as_df = df[(df['NOMBRE'] == al) & (df['ASIGNATURA'] == asig)]
-            #print(filt_al_as_df)
+            
             if(len(filt_al_as_df) == 0):
                 print(f'Error: El alumno {al} no tiene la asignatura {asig} asignada')
                 err1 = True
@@ -80,33 +65,13 @@ def eliminarCrearCarpetas(path):
 
     os.mkdir(path)
 
-def main():    
-    eliminarCrearCarpetas(PATH_OUTPUT)  
-    # Cargar documento
-    docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
-         
-    # Leemos notas y datos alumnos 
-    excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
-    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
-    
-    for index, row in excel_df.iterrows():
-        #print(index, row['NOMBRE'])
-        pass
-        
-    asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
-    #print(asig_list)
-    
-    filter_td_asig = []
-    for item in asig_list:
-        valorTd = dict_asig[item]
-        filter_td_asig.append(valorTd)
-    #print(filter_td_asig)
-    
-    deteccionErrores(excel_df)
-    
+def crearWordAsignarTag(datos_alumnos, excel_df):
     nombre_Alumno_list = sorted(list(datos_alumnos['NOMBRE']))
     
     for nombre_alumno in nombre_Alumno_list:
+        # Cargar documento
+        docs_tpl = DocxTemplate(PLANTILLA_CURSOS_PATH)
+        
         filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
         clase = filt_datos_alumnos_df.iloc[0]['CLASE']
             
@@ -127,6 +92,47 @@ def main():
         
         # Guardamos el documento
         docs_tpl.save(PATH_OUTPUT + '\\' + titulo)
+    
+
+def aniadirTildesAsignaturas(excel_df):
+    dict_asig = {
+        'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
+        'BIOLOGIA':                         'Biología',
+        'GEOGRAFIA E HISTORIA':             'Geografía e Historia',
+        'MATEMATICAS':                      'Matemáticas',
+        'INGLES':                           'Inglés',
+        'EDUCACION FISICA':                 'Educación Física',
+        'ETICA':                            'Ética',
+        'CULTURA CLASICA':                  'Cultura clásica',
+        'MUSICA':                           'Música',
+        'TECNOLOGIA':                       'Tecnología',
+        'EDUCACION PLASTICA':               'Educación Plástica',
+        'FRANCES':                          'Francés',
+    }
+    
+    asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
+        
+    filter_td_asig = []
+    for item in asig_list:
+        valorTd = dict_asig[item]
+        filter_td_asig.append(valorTd)
+    
+
+def main():    
+    eliminarCrearCarpetas(PATH_OUTPUT)    
+         
+    # Leemos notas y datos alumnos 
+    excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
+    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
+
+    # Agregamos tildes a las asignaturas        
+    aniadirTildesAsignaturas(excel_df)
+    
+    # Detectamos errores
+    deteccionErrores(excel_df)
+    
+    # Creamos y asignamos tags en el word
+    crearWordAsignarTag(datos_alumnos, excel_df)
     
 if __name__ == '__main__':
     main()
