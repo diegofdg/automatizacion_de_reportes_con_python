@@ -3,6 +3,7 @@ import sys
 import shutil
 import os
 from docxtpl import DocxTemplate
+import copy
 
 PATH_CARPETA = r'D:\mis_proyectos\ciencia_de_datos\automatizacion_de_reportes_con_python\project-excel'
 PATH_OUTPUT = PATH_CARPETA + r'\outputs'
@@ -80,6 +81,30 @@ def eliminarCrearCarpetas(path):
 
     os.mkdir(path)
 
+def ObtenerNotaFinal(dict_asignatura):
+    newAsignaturaDict = copy.deepcopy(dict_asignatura)
+    TRIMESTRE_LIST = ['t1', 't2', 't3']
+    
+    # Obtener la nota final
+    nota_media = 0
+    for trim in TRIMESTRE_LIST:
+        nota_media += newAsignaturaDict[trim]
+    nota_media /= 3
+    newAsignaturaDict['nota_final'] = round(nota_media, 1) 
+    
+    # Obtener la calificación
+    if(nota_media < 5.0):
+        calif = 'SUSPENSO'
+    elif(nota_media < 7.0):
+        calif = 'APROBADO'
+    elif(nota_media < 9.0):
+        calif = 'NOTABLE'
+    else:
+        calif = 'SOBRESALIENTE'
+    newAsignaturaDict['calificacion'] = calif
+    
+    return newAsignaturaDict
+
 def crearWordAsignarTag(datos_alumnos, excel_df):
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
         
@@ -112,7 +137,11 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
                 't2': round( filt_al_as_excel_df.iloc[0]['NOTA T2'],1),
                 't3': round(filt_al_as_excel_df.iloc[0]['NOTA T3'],1),
             }
+            
+            asignatura_dict = ObtenerNotaFinal(asignatura_dict)
+            
             asignatura_list.append(asignatura_dict)
+            
             
         # Context
         context = {
