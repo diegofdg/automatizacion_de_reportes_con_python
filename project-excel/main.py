@@ -86,7 +86,7 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
     filter_td_asig = []
     for item in asig_list:
         valorTd = dict_asig[item]
-        filter_td_asig.append(valorTd)
+        filter_td_asig.append(valorTd.upper())
     
     nombre_Alumno_list = sorted(list(datos_alumnos['NOMBRE']))
     
@@ -96,6 +96,15 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
         
         filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
         clase = filt_datos_alumnos_df.iloc[0]['CLASE']
+        
+        # Crear tabla de notas
+        asignatura_list = []
+        
+        # Iterar sobre los índices de asignaturas
+        for asig_idx in range(len(asig_list)):
+            asign = asig_list[asig_idx]
+            filt_al_as_excel_df = excel_df[(excel_df['NOMBRE'] == nombre_alumno) & (excel_df['ASIGNATURA'] == asign)]
+            print(filt_al_as_excel_df)
             
         # Context
         context = {
