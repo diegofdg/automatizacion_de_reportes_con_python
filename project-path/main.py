@@ -1,5 +1,6 @@
 from pathlib import Path
 import calendar
+import zipfile
 
 ### Creamos una carpeta
 # Path('project-path/nueva_carpeta').mkdir(exist_ok=True)
@@ -74,6 +75,13 @@ import calendar
     # path.unlink()
 
 ### Eliminar todos los archivos .txt menos el test9
-for path in Path('project-path/test/').glob('test[1-8].txt'):
-    path.unlink()
- 
+# for path in Path('project-path/test/').glob('test[1-8].txt'):
+    # path.unlink()
+
+### Extraer zip
+directorio_actual = Path('project-path/')
+directorio_objetivo = Path('project-path/temp')
+
+for path in directorio_actual.glob('*.zip'):
+    with zipfile.ZipFile(path, 'r') as zipObj:
+        zipObj.extractall(path = directorio_objetivo)
