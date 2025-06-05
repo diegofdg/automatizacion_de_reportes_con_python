@@ -41,10 +41,24 @@ import calendar
     # print(path)
 
 ### Obtener un listado de archivos de un directorio
-carpeta = Path('project-path/nuevo_test')
-paths = carpeta.glob('**/*')
-for path in paths:
-    if path.is_file():
-        print(f'El archivo encontrado es: {path}')
-    else: 
-        print('No hay archivos')
+# carpeta = Path('project-path/nuevo_test')
+# paths = carpeta.glob('**/*')
+# for path in paths:
+    # if path.is_file():
+        # print(f'El archivo encontrado es: {path}')
+    # else: 
+        # print('No hay archivos')
+        
+### Cambiar extensión de un archivo
+folder = Path('project-path/extensiones')
+
+# Pasar de txt a csv
+# for path in list(folder.iterdir()):
+    # if path.suffix == '.txt':
+        # nuevoNombreExtension = path.with_suffix('.csv')
+        # path.rename(nuevoNombreExtension)
+
+# Pasar de csv a txt
+for path in folder.glob('**/*.csv'):    
+    nuevoNombreExtension = path.with_suffix('.txt')
+    path.rename(nuevoNombreExtension)
