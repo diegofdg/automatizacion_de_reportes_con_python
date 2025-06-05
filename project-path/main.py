@@ -1,6 +1,7 @@
 from pathlib import Path
 import calendar
 import zipfile
+import pandas as pd
 
 ### Creamos una carpeta
 # Path('project-path/nueva_carpeta').mkdir(exist_ok=True)
@@ -79,9 +80,12 @@ import zipfile
     # path.unlink()
 
 ### Extraer zip
-directorio_actual = Path('project-path/')
-directorio_objetivo = Path('project-path/temp')
+# directorio_actual = Path('project-path/')
+# directorio_objetivo = Path('project-path/temp')
 
-for path in directorio_actual.glob('*.zip'):
-    with zipfile.ZipFile(path, 'r') as zipObj:
-        zipObj.extractall(path = directorio_objetivo)
+# for path in directorio_actual.glob('*.zip'):
+    # with zipfile.ZipFile(path, 'r') as zipObj:
+        # zipObj.extractall(path = directorio_objetivo)
+        
+simp = pd.read_html('https://es.wikipedia.org/wiki/Anexo:Episodios_de_Los_Simpson')
+print(simp[1])
