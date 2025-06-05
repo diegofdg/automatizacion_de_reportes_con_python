@@ -1,6 +1,7 @@
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.chart import BarChart, Reference
+from openpyxl.styles import Font
 
 archivo_excel = pd.read_excel('project-report/supermarket_sales.xlsx')
 # print(archivo_excel[['Gender', 'Product line', 'Total']])
@@ -34,6 +35,12 @@ barChart.add_data(categoria)
 
 pestania.add_chart(barChart, 'B12')
 barChart.title = 'Ventas'
-barChart.style = 5
+barChart.style = 4
+
+pestania['A1'] = 'Reporte'
+pestania['A2'] = '2022'
+
+pestania['A1'].font = Font('Arial', bold=True, size=20)
+pestania['A2'].font = Font('Arial', bold=True, size=15)
 
 wb.save('sales_2022.xlsx')
